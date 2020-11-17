@@ -4,36 +4,29 @@ namespace App\Models;
 
 use CodeIgniter\Model;
 
-class PropertyModel extends Model
+class UserModel extends Model
 {
-    protected $table      = 'properties';
+    protected $table      = 'users';
     protected $primaryKey = 'id';
 
     protected $returnType     = 'object';
 
-    protected $allowedFields = [
-        'title',
-        'type',
-        'slug',
-        'price',
-        'size',
-        'bedrooms',
-        'bathrooms',
-        'floors',
-        'country_id',
-        'city_id',
-        'map_embed',
-        'longitude',
-        'latitude',
-        'user_id'
-    ];
+    protected $allowedFields = ['name', 'email', 'password'];
 
     protected $useTimestamps = true;
     protected $createdField  = 'created_at';
     protected $updatedField  = 'updated_at';
     protected $deletedField  = 'deleted_at';
 
+    protected $beforeInsert = ['hashPassword'];
+
     protected $validationRules    = [];
     protected $validationMessages = [];
     protected $skipValidation     = false;
+
+    protected function hashPassword(array $data)
+    {
+        $data['data']['password'] = password_hash($data['data']['password'], PASSWORD_BCRYPT);
+        return $data;
+    }
 }

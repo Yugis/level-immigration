@@ -1,23 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <title>Welcome to CodeIgniter 4!</title>
-    <meta name="description" content="The small framework with powerful features">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="shortcut icon" type="image/png" href="/favicon.ico" />
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <!-- STYLES -->
-</head>
-
-<body>
-
     <div class="container mt-5">
         <form action="/properties/store" method="post">
             <h3>Add a new Listing</h3>
             <div class="form-group">
-                <label for="name">Title</label>
+                <label for="title">Title</label>
                 <input type="text" name="title" class="form-control" required>
             </div>
             <div class="form-group">
@@ -100,7 +85,3 @@
     <br>
     <br>
     <br>
-
-</body>
-
-</html>

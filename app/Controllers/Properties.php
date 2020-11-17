@@ -3,12 +3,20 @@
 namespace App\Controllers;
 
 use CodeIgniter\Controller;
+use App\Models\PropertyModel;
 
 class Properties extends BaseController
 {
+    public function __construct()
+    {
+        $this->data['title'] = 'Create a Property';
+    }
+
     public function create()
     {
-        return view('properties/create');
+        echo view('partials/header', $this->data);
+        echo view('properties/create');
+        return view('partials/footer');
     }
 
     public function store()
@@ -16,32 +24,29 @@ class Properties extends BaseController
         $validation =  \Config\Services::validation();
 
         $property = $this->request->getVar(['title', 'type', 'price', 'size', 'bedrooms', 'bathrooms', 'floors', 'country_id', 'city_id']);
-        $data = $this->request->getVar(['summary', 'whys', 'details', 'location']);
         $property['slug'] = $this->slugify($property['title']);
+        $property['user_id'] = session()->get('id');
 
-        // $validation->setRules([
-        //     'title' => 'required',
-        //     'type' => 'required',
-        //     'price' => 'required',
-        //     'description' => 'required',
-        //     'bedrooms' => 'required',
-        //     'bathrooms' => 'required',
-        //     'city' => 'required',
-        //     'country_id' => 'required'
-        // ]);
+        $data = $this->request->getVar(['summary', 'whys', 'details', 'location']);
+
+        $validation->setRules([
+            'title' => 'required|string',
+            'type' => 'required|string',
+            'price' => 'required',
+            'city' => 'required',
+            'country_id' => 'required'
+        ]);
 
         // if (!$validation->run($property)) {
         //     die(json_encode($validation->getErrors()));
         // }
 
-        $db = \Config\Database::connect();
-        $db->table('properties')->insert($property);
+        $property_id = (new PropertyModel())->insert($property);
 
-        $last_insert_id = $db->insertID();
         foreach ($data as $key => $value) {
             if ($key == 'whys') {
                 foreach ($value as $why) {
-                    $contents['property_id'] = $last_insert_id;
+                    $contents['property_id'] = $property_id;
                     $contents['field'] = 'whys';
                     $contents['content'] = $why;
                     $content[] = $contents;
@@ -49,13 +54,14 @@ class Properties extends BaseController
                 }
                 continue;
             }
-            $contents['property_id'] = $last_insert_id;
+            $contents['property_id'] = $property_id;
             $contents['field'] = $key;
             $contents['content'] = $value;
             $content[] = $contents;
             $contents = [];
         }
 
+        $db = \Config\Database::connect();
         $db->table('property_contents')->insertBatch($content);
 
         return redirect()->to('create');

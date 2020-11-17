@@ -1,4 +1,6 @@
-<?php namespace Config;
+<?php
+
+namespace Config;
 
 use CodeIgniter\Config\BaseConfig;
 
@@ -7,9 +9,10 @@ class Filters extends BaseConfig
 	// Makes reading things below nicer,
 	// and simpler to change out script that's used.
 	public $aliases = [
-		'csrf'     => \CodeIgniter\Filters\CSRF::class,
-		'toolbar'  => \CodeIgniter\Filters\DebugToolbar::class,
-		'honeypot' => \CodeIgniter\Filters\Honeypot::class,
+		'csrf'     		=> \CodeIgniter\Filters\CSRF::class,
+		'toolbar'  		=> \CodeIgniter\Filters\DebugToolbar::class,
+		'honeypot' 		=> \CodeIgniter\Filters\Honeypot::class,
+		'isLoggedIn'	=> \App\Filters\AuthFilter::class,
 	];
 
 	// Always applied before every request
@@ -32,5 +35,7 @@ class Filters extends BaseConfig
 	// List filter aliases and any before/after uri patterns
 	// that they should run on, like:
 	//    'isLoggedIn' => ['before' => ['account/*', 'profiles/*']],
-	public $filters = [];
+	public $filters = [
+		'isLoggedIn' => ['before' => ['properties/*']]
+	];
 }
