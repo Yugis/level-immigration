@@ -41,13 +41,13 @@ class Login extends BaseController
 
             $this->setUserSession($user);
 
-            return redirect()->to('/properties/create');
+            return redirect()->to('/dashboard');
         }
     }
 
     private function setUserSession($user)
     {
-        $data = [
+        $data['user'] = [
             'id' => $user->id,
             'name' => $user->name,
             'email' => $user->email,
